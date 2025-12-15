@@ -65,20 +65,31 @@
 		}
 
 		// Listen for first user interaction to enable audio
-		const handleInteraction = () => {
-			if (!hasInteracted) {
-				hasInteracted = true;
-				showPrompt = false;
+		// Use touchend (not touchstart) for mobile - touchstart doesn't satisfy
+		// browser autoplay policies since the gesture isn't complete
+		const events = ["click", "touchend", "keydown"];
 
-				// Initialize audio context if needed or just play
-				if (!isPlaying && autoPlay && audio) {
-					play();
-				}
+		const cleanupListeners = () => {
+			events.forEach((event) => {
+				document.removeEventListener(event, handleInteraction);
+			});
+		};
+
+		const handleInteraction = () => {
+			// Prevent double-firing (touchend + click can both fire on mobile)
+			if (hasInteracted) return;
+			hasInteracted = true;
+			showPrompt = false;
+			cleanupListeners();
+
+			// Initialize audio context if needed or just play
+			if (!isPlaying && autoPlay && audio) {
+				play();
 			}
 		};
 
-		["click", "touchstart", "keydown"].forEach((event) => {
-			document.addEventListener(event, handleInteraction, { once: true });
+		events.forEach((event) => {
+			document.addEventListener(event, handleInteraction);
 		});
 	});
 

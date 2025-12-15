@@ -44,6 +44,8 @@
         peakHour: stats.peakHour,
         bingeCount: stats.bingeCount,
         totalMinutes: stats.totalMinutes,
+        primaryGenre: stats.primaryGenre,
+        primaryGenrePercentage: stats.primaryGenrePercentage,
     });
 
     $: peakHour = formatHour(stats.peakHour);

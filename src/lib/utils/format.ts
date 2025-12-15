@@ -173,8 +173,8 @@ export function formatDate(dateStr: string): string {
 }
 
 /**
- * Get viewing personality label - now with MORE personality!
- * Considers combinations of traits for unique archetypes
+ * Get viewing personality label - esoteric archetypes that blend multiple metrics
+ * The names should be intriguing and require reading into the subtext
  */
 export function getViewingPersonality(stats: {
     isNightOwl: boolean;
@@ -183,132 +183,164 @@ export function getViewingPersonality(stats: {
     peakHour?: number;
     bingeCount?: number;
     totalMinutes?: number;
+    primaryGenre?: string | null;
+    primaryGenrePercentage?: number;
+    secondaryGenre?: string | null;
+    genreDiversity?: number;
+    movieToTvRatio?: number;
 }): { label: string; unicode: string; tagline: string } {
+    // Derived metrics
     const hasLotOfBinges = (stats.bingeCount || 0) >= 5;
+    const isBinger = (stats.bingeCount || 0) >= 3;
     const isHeavyViewer = (stats.totalMinutes || 0) >= 10000;
+    const isModerateViewer = (stats.totalMinutes || 0) >= 4000 && (stats.totalMinutes || 0) < 10000;
     const isLightViewer = (stats.totalMinutes || 0) < 2000;
+    const isVeryLightViewer = (stats.totalMinutes || 0) < 500;
     const isPeakLateNight = stats.peakHour !== undefined && (stats.peakHour >= 23 || stats.peakHour <= 3);
     const isPeakMorning = stats.peakHour !== undefined && (stats.peakHour >= 5 && stats.peakHour <= 8);
+    const isPeakAfternoon = stats.peakHour !== undefined && (stats.peakHour >= 12 && stats.peakHour <= 16);
 
-    // Unique combinations - ordered by specificity
+    // Genre analysis
+    const genre = (stats.primaryGenre || '').toLowerCase();
+    const genrePct = stats.primaryGenrePercentage || 0;
+    const hasStrongGenre = genrePct >= 30;
+    const hasDominantGenre = genrePct >= 45;
+    const isGenreDiverse = (stats.genreDiversity || 0) >= 0.75;
+    const isGenreFocused = (stats.genreDiversity || 0) < 0.5;
+
+    // Content type preference
+    const prefersMovies = (stats.movieToTvRatio || 0) > 1.5;
+    const prefersTv = (stats.movieToTvRatio || 0) < 0.5;
+    const isBalanced = (stats.movieToTvRatio || 0) >= 0.5 && (stats.movieToTvRatio || 0) <= 1.5;
+
+    // === THE ESOTERIC ARCHETYPES ===
+    // Multi-metric combinations, ordered by specificity
+
+    // The ultra-specific combos (4+ factors)
+    if (stats.isNightOwl && isPeakLateNight && hasLotOfBinges && (genre.includes('horror') || genre.includes('thriller'))) {
+        return { label: 'Keeper of the Witching Hour', unicode: '☽', tagline: 'Some rituals require complete darkness.' };
+    }
+
+    if (stats.isWeekendWarrior && isHeavyViewer && isGenreDiverse && hasLotOfBinges) {
+        return { label: 'The Sovereign of Saturdays', unicode: '⚜', tagline: 'A throne built from streaming queues.' };
+    }
+
+    if (stats.isEarlyBird && isPeakMorning && prefersMovies && isLightViewer) {
+        return { label: 'The Golden Hour', unicode: '☀', tagline: 'Stories taste better with sunrise.' };
+    }
+
+    // Genre + behavior combos
+    if ((genre.includes('documentary') || genre.includes('history')) && isHeavyViewer && isGenreFocused) {
+        return { label: 'The Obsidian Scholar', unicode: '◈', tagline: 'Knowledge carved deep, rewatched deeper.' };
+    }
+
+    if ((genre.includes('sci-fi') || genre.includes('science fiction') || genre.includes('fantasy')) && hasStrongGenre && isBinger) {
+        return { label: 'Cartographer of Elsewhere', unicode: '✧', tagline: "Mapping worlds that don't exist. Yet." };
+    }
+
+    if (genre.includes('drama') && hasLotOfBinges && prefersTv) {
+        return { label: 'The Unraveler', unicode: '∞', tagline: 'Every thread must be followed to its end.' };
+    }
+
+    if (genre.includes('comedy') && stats.isWeekendWarrior && isModerateViewer) {
+        return { label: 'The Decompression Chamber', unicode: '◯', tagline: 'Laughter prescribed. Side effects: weekends gone.' };
+    }
+
+    if ((genre.includes('horror') || genre.includes('thriller')) && stats.isNightOwl) {
+        return { label: 'The Abyss Gazer', unicode: '◐', tagline: 'When you stare long enough, it stares back.' };
+    }
+
+    if (genre.includes('action') && hasDominantGenre && isHeavyViewer) {
+        return { label: 'The Kinetic Constant', unicode: '⊕', tagline: 'Static is not an option.' };
+    }
+
+    if (genre.includes('animation') && hasStrongGenre && (prefersTv || isBinger)) {
+        return { label: 'Keeper of Drawn Worlds', unicode: '✦', tagline: 'Where frames become feelings.' };
+    }
+
+    if (genre.includes('romance') && hasStrongGenre) {
+        return { label: 'The Eternal Optimist', unicode: '∿', tagline: 'Every ending is just a beginning in disguise.' };
+    }
+
+    // Time-pattern + viewing style combos
     if (stats.isNightOwl && stats.isWeekendWarrior && hasLotOfBinges) {
-        return {
-            label: 'Vampire Cinema Club',
-            unicode: '⁂',
-            tagline: 'Sleep is for the weak. Content is eternal.'
-        };
+        return { label: 'The Nocturnal Order', unicode: '⁂', tagline: 'Membership requires forsaking sunlight.' };
     }
 
     if (stats.isNightOwl && isPeakLateNight && isHeavyViewer) {
-        return {
-            label: 'The Insomniac',
-            unicode: '◎',
-            tagline: 'Who needs sleep when there\'s one more episode?'
-        };
+        return { label: 'The Liminal Watcher', unicode: '◎', tagline: 'The hours between days belong to you.' };
     }
 
     if (stats.isNightOwl && hasLotOfBinges) {
-        return {
-            label: 'Goblin Mode Activated',
-            unicode: '◬',
-            tagline: 'Thriving in the darkness, one season at a time.'
-        };
+        return { label: 'Goblin Mode Activated', unicode: '◬', tagline: 'Thriving in the darkness, one season at a time.' };
     }
 
     if (stats.isNightOwl && stats.isWeekendWarrior) {
-        return {
-            label: 'Midnight Marathoner',
-            unicode: '◐',
-            tagline: 'The couch calls after dark.'
-        };
+        return { label: 'The Saturday Specter', unicode: '◐', tagline: 'Haunting living rooms after midnight.' };
+    }
+
+    if (prefersMovies && isHeavyViewer && isGenreDiverse) {
+        return { label: 'The Celluloid Pilgrim', unicode: '◇', tagline: 'Every film a destination, never a detour.' };
+    }
+
+    if (prefersTv && hasLotOfBinges && isGenreFocused) {
+        return { label: 'The Deep Diver', unicode: '∴', tagline: 'Surface-level is for tourists.' };
+    }
+
+    if (isGenreDiverse && isModerateViewer && isBalanced) {
+        return { label: 'The Polyphile', unicode: '⊹', tagline: 'Commitment to anything but one thing.' };
     }
 
     if (stats.isEarlyBird && isLightViewer) {
-        return {
-            label: 'The Minimalist',
-            unicode: '◇',
-            tagline: 'Quality over quantity, always.'
-        };
+        return { label: 'The Measured Dose', unicode: '◇', tagline: 'Precise. Intentional. Gone by noon.' };
     }
 
     if (stats.isEarlyBird && isPeakMorning) {
-        return {
-            label: 'Sunrise Cinephile',
-            unicode: '◑',
-            tagline: 'Coffee in hand, remote in the other.'
-        };
+        return { label: "Dawn's First Light", unicode: '◑', tagline: 'Morning rituals require a protagonist.' };
     }
 
     if (stats.isEarlyBird) {
-        return {
-            label: 'Dawn Patrol',
-            unicode: '☼',
-            tagline: 'Catching shows before the world wakes up.'
-        };
+        return { label: 'The Anti-Algorithm', unicode: '☼', tagline: "Watching when no one's tracking." };
     }
 
     if (stats.isWeekendWarrior && hasLotOfBinges) {
-        return {
-            label: 'The Hibernator',
-            unicode: '◉',
-            tagline: 'Weekdays are just the wait before the weekend binge.'
-        };
+        return { label: 'The Hibernator', unicode: '◉', tagline: 'Five days of waiting. Two days of living.' };
     }
 
     if (stats.isWeekendWarrior && isHeavyViewer) {
-        return {
-            label: 'Couch Royalty',
-            unicode: '◈',
-            tagline: 'The living room throne awaits every weekend.'
-        };
+        return { label: 'The Contained Chaos', unicode: '◈', tagline: 'Structured freedom, scheduled abandon.' };
     }
 
     if (stats.isWeekendWarrior) {
-        return {
-            label: 'Weekend Warrior',
-            unicode: '⚔',
-            tagline: 'Saving all the good stuff for Saturday.'
-        };
+        return { label: 'The 48-Hour Window', unicode: '⚔', tagline: 'Efficiency measured in episodes per weekend.' };
     }
 
     if (stats.isNightOwl) {
-        return {
-            label: 'Night Owl',
-            unicode: '◐',
-            tagline: 'The best shows come out after midnight.'
-        };
+        return { label: 'The After-Hours', unicode: '◐', tagline: 'When the algorithm sleeps, you begin.' };
     }
 
     if (isHeavyViewer && hasLotOfBinges) {
-        return {
-            label: 'The Completionist',
-            unicode: '✧',
-            tagline: 'If it exists, it must be watched. All of it.'
-        };
+        return { label: 'The Event Horizon', unicode: '✧', tagline: 'Past the point of no return, contentedly.' };
     }
 
     if (isHeavyViewer) {
-        return {
-            label: 'The Archivist',
-            unicode: '∴',
-            tagline: 'Building a mental library, one show at a time.'
-        };
+        return { label: 'The Living Archive', unicode: '∴', tagline: 'Some collect stamps. You collect narratives.' };
+    }
+
+    if (isVeryLightViewer) {
+        return { label: 'The Apparition', unicode: '∿', tagline: 'Glimpsed once, gone twice, remembered always.' };
     }
 
     if (isLightViewer) {
-        return {
-            label: 'The Phantom',
-            unicode: '∿',
-            tagline: 'Appears briefly, watches intensely, vanishes.'
-        };
+        return { label: 'The Phantom', unicode: '∿', tagline: 'Appears briefly, watches intensely, vanishes.' };
+    }
+
+    if (isPeakAfternoon && isBalanced) {
+        return { label: 'The Daylight Dweller', unicode: '◯', tagline: 'Peak hours. Peak choices.' };
     }
 
     // Default: steady viewer with no extreme patterns
-    return {
-        label: 'The Curator',
-        unicode: '◇',
-        tagline: 'A refined taste, perfectly balanced.'
-    };
+    return { label: 'The Quiet Collector', unicode: '◇', tagline: 'Building something only you understand.' };
 }
 
 

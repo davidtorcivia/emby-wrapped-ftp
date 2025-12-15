@@ -83,6 +83,15 @@ export interface UserStats {
 
     // Music (optional)
     music?: MusicStats;
+
+    // Primary genre for personality (most watched)
+    primaryGenre: string | null;
+    primaryGenrePercentage: number;
+    secondaryGenre: string | null;
+
+    // Diversity and preference ratios
+    genreDiversity: number;  // 0-1, higher = more diverse viewing
+    movieToTvRatio: number;  // >1 = prefers movies, <1 = prefers TV
 }
 
 /**
@@ -426,6 +435,18 @@ export async function aggregateUserStats(userId: string, username: string, year:
         bingeCount: bingeSessions.length,
         firstWatch,
         lastWatch,
-        music: musicStats
+        music: musicStats,
+        primaryGenre: topGenres.length > 0 ? topGenres[0].name : null,
+        primaryGenrePercentage: topGenres.length > 0 ? topGenres[0].percentage : 0,
+        secondaryGenre: topGenres.length > 1 ? topGenres[1].name : null,
+        // Genre diversity: 1 - (concentration). High if viewing spread across many genres
+        genreDiversity: topGenres.length > 0
+            ? 1 - (topGenres.reduce((sum, g) => sum + Math.pow(g.percentage / 100, 2), 0))
+            : 0,
+        // Movie to TV ratio: minutes in movies vs episodes
+        movieToTvRatio: episodes.length > 0
+            ? (movies.reduce((sum, m) => sum + parseInt(m.duration || '0', 10), 0) / 60) /
+            Math.max(1, episodes.reduce((sum, e) => sum + parseInt(e.duration || '0', 10), 0) / 60)
+            : uniqueMovieIds.size > 0 ? 10 : 0  // Movie-only viewer
     };
 }
