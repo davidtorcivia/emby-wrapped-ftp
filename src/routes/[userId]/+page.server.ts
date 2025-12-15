@@ -131,8 +131,13 @@ export const load: PageServerLoad = async ({ params }) => {
             setCachedStats(userId, stats);
         }
 
-        const userImageUrl = user.PrimaryImageTag
+        const rawUserImageUrl = user.PrimaryImageTag
             ? emby.getUserImageUrl(userId)
+            : null;
+
+        // Proxy the image to avoid Local Network Access browser restrictions
+        const userImageUrl = rawUserImageUrl
+            ? `/api/proxy-image?url=${encodeURIComponent(rawUserImageUrl)}`
             : null;
 
         return {
