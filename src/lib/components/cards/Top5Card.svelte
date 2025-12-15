@@ -215,6 +215,14 @@
 		overflow: hidden;
 	}
 
+	/* More compact on mobile to prevent overflow */
+	@media (max-width: 600px) {
+		.card-base {
+			padding: 3rem 0.75rem 1rem;
+			justify-content: flex-start;
+		}
+	}
+
 	.card-base.visible {
 		opacity: 1;
 	}
@@ -426,20 +434,37 @@
 		border-top: 1px solid rgba(255, 255, 255, 0.05);
 	}
 
-	/* Mobile tweak: 2x2 grid on mobile screens */
+	/* Mobile tweak: smaller hero, 2x2 grid, tighter spacing */
 	@media (max-width: 600px) {
 		.hero-poster-wrap {
-			width: 160px; /* Smaller hero on mobile */
+			width: 140px; /* Smaller hero on mobile */
+		}
+
+		.hero-title {
+			font-size: 1.25rem;
+		}
+
+		.hero-info {
+			margin-top: 0.75rem;
+		}
+
+		.hero-stats {
+			font-size: 0.875rem;
 		}
 
 		.main-title {
-			font-size: 1.75rem;
+			font-size: 1.5rem;
+		}
+
+		.posters-grid {
+			gap: 0.75rem;
 		}
 
 		.secondary-grid {
 			grid-template-columns: repeat(2, 1fr);
-			gap: 1rem;
-			max-width: 350px; /* Constrain grid width on mobile */
+			gap: 0.75rem;
+			max-width: 280px;
+			padding-top: 1rem;
 		}
 	}
 
@@ -457,8 +482,8 @@
 	/* Mobile grid item sizing */
 	@media (max-width: 600px) {
 		.grid-item {
-			width: 100%; /* Allow to fill the smaller grid track */
-			max-width: 110px;
+			width: 100%;
+			max-width: 100px;
 		}
 	}
 

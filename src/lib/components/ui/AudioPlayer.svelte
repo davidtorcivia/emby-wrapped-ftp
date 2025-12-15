@@ -160,61 +160,18 @@
 {/if}
 
 {#if musicTracks.length > 0}
-	<div class="audio-controls" class:visible={hasInteracted}>
-		<button
-			class="control-btn"
-			on:click={toggleMute}
-			aria-label={isMuted ? "Unmute" : "Mute"}
-		>
-			{#if isMuted}
-				<!-- Speaker X (Muted) -->
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="20"
-					height="20"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				>
-					<path d="M11 5L6 9H2v6h4l5 4V5z" />
-					<line x1="23" y1="9" x2="17" y2="15" />
-					<line x1="17" y1="9" x2="23" y2="15" />
-				</svg>
-			{:else}
-				<!-- Speaker Wave (Volume) -->
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="20"
-					height="20"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				>
-					<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"
-					></polygon>
-					<path
-						d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"
-					></path>
-				</svg>
-			{/if}
-		</button>
-
-		<button
-			class="control-btn"
-			on:click={nextTrack}
-			aria-label="Skip Track"
-		>
-			<!-- Skip Forward Icon -->
+	<!-- Mute button - left side on mobile -->
+	<button
+		class="audio-btn mute-btn"
+		class:visible={hasInteracted}
+		on:click={toggleMute}
+		aria-label={isMuted ? "Unmute" : "Mute"}
+	>
+		{#if isMuted}
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
-				width="20"
-				height="20"
+				width="18"
+				height="18"
 				viewBox="0 0 24 24"
 				fill="none"
 				stroke="currentColor"
@@ -222,63 +179,110 @@
 				stroke-linecap="round"
 				stroke-linejoin="round"
 			>
-				<polygon points="5 4 15 12 5 20 5 4"></polygon>
-				<line x1="19" y1="5" x2="19" y2="19"></line>
+				<path d="M11 5L6 9H2v6h4l5 4V5z" />
+				<line x1="23" y1="9" x2="17" y2="15" />
+				<line x1="17" y1="9" x2="23" y2="15" />
 			</svg>
-		</button>
-	</div>
+		{:else}
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="18"
+				height="18"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+				<path
+					d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"
+				></path>
+			</svg>
+		{/if}
+	</button>
+
+	<!-- Skip button - right side on mobile -->
+	<button
+		class="audio-btn skip-btn"
+		class:visible={hasInteracted}
+		on:click={nextTrack}
+		aria-label="Skip Track"
+	>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="18"
+			height="18"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		>
+			<polygon points="5 4 15 12 5 20 5 4"></polygon>
+			<line x1="19" y1="5" x2="19" y2="19"></line>
+		</svg>
+	</button>
 {/if}
 
 <style>
-	.audio-controls {
+	/* Audio control buttons - positioned at corners on mobile */
+	.audio-btn {
 		position: fixed;
 		bottom: 1.5rem;
-		right: 1.5rem;
 		z-index: 1000;
+		width: 40px;
+		height: 40px;
 		display: flex;
 		align-items: center;
-		gap: 1.5rem; /* Increased gap */
-		padding: 0.75rem 1.25rem;
+		justify-content: center;
 		background: rgba(20, 20, 20, 0.9);
 		backdrop-filter: blur(10px);
 		border: 1px solid rgba(255, 255, 255, 0.1);
-		border-radius: 100px; /* Fully rounded capsule */
-		color: white;
-		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+		border-radius: 50%;
+		color: rgba(255, 255, 255, 0.7);
+		cursor: pointer;
 		transition: all 0.2s ease;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.audio-btn.visible {
+		opacity: 1;
+		pointer-events: auto;
+	}
+
+	.mute-btn {
+		left: 1.5rem;
+	}
+
+	.skip-btn {
+		right: 1.5rem;
+	}
+
+	.audio-btn:hover {
+		color: white;
+		background: rgba(29, 185, 84, 0.3);
+		border-color: rgba(29, 185, 84, 0.5);
 	}
 
 	/* More subtle on mobile */
 	@media (max-width: 768px) {
-		.audio-controls {
-			opacity: 0.6;
-			background: rgba(20, 20, 20, 0.7);
-			padding: 0.5rem 1rem;
+		.audio-btn {
+			opacity: 0;
+			width: 36px;
+			height: 36px;
 		}
 
-		.audio-controls:hover,
-		.audio-controls:active {
+		.audio-btn.visible {
+			opacity: 0.6;
+		}
+
+		.audio-btn:active {
 			opacity: 1;
 		}
-	}
-
-	.control-btn {
-		background: transparent;
-		border: none;
-		color: rgba(255, 255, 255, 0.7);
-		cursor: pointer;
-		padding: 0.5rem; /* Touch target size */
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		transition: all 0.2s ease;
-		border-radius: 50%;
-	}
-
-	.control-btn:hover {
-		color: white;
-		background: rgba(255, 255, 255, 0.1);
-		transform: scale(1.1);
 	}
 
 	.audio-prompt {
