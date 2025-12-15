@@ -27,11 +27,7 @@
 			console.error("Failed to load music list", e);
 		}
 
-		// Fallback if API fails
-		musicTracks = [
-			"/music/wrapped-theme.mp3",
-			"/music/wrapped-theme-2.mp3",
-		];
+		// No fallback - if API fails, no music
 		return false;
 	}
 

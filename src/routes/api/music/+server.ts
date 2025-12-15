@@ -13,7 +13,7 @@ export async function GET() {
         const files = fs.readdirSync(musicDir);
         const tracks = files
             .filter(file => file.endsWith('.mp3')) // Only MP3s
-            .map(file => `/music/${file}`);
+            .map(file => `/api/music/${encodeURIComponent(file)}`);
 
         return json({ tracks });
     } catch (error) {

@@ -5,7 +5,8 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { env } from '$env/dynamic/private';
 
-const CACHE_DIR = '.cache/images';
+// Use /tmp for cache to work with read-only filesystem in Docker
+const CACHE_DIR = process.env.NODE_ENV === 'production' ? '/tmp/image-cache' : '.cache/images';
 
 // Allowed domains for image proxying (security)
 const ALLOWED_DOMAINS = [
@@ -53,8 +54,12 @@ function isAllowedUrl(urlString: string): boolean {
 }
 
 // Ensure cache directory exists
-if (!existsSync(CACHE_DIR)) {
-    mkdirSync(CACHE_DIR, { recursive: true });
+try {
+    if (!existsSync(CACHE_DIR)) {
+        mkdirSync(CACHE_DIR, { recursive: true });
+    }
+} catch (e) {
+    console.warn('Could not create image cache directory:', e);
 }
 
 function getCacheKey(url: string): string {

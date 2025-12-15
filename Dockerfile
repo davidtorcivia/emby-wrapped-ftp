@@ -29,6 +29,9 @@ COPY --from=builder --chown=sveltekit:nodejs /app/build ./build
 COPY --from=builder --chown=sveltekit:nodejs /app/package*.json ./
 COPY --from=builder --chown=sveltekit:nodejs /app/node_modules ./node_modules
 
+# Create static/music directory for volume mounting
+RUN mkdir -p /app/static/music && chown -R sveltekit:nodejs /app/static
+
 # Set environment variables
 ENV NODE_ENV=production
 ENV PORT=3000

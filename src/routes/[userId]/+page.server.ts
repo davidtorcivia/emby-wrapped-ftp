@@ -6,12 +6,17 @@ import type { PageServerLoad } from './$types';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
-const STATS_CACHE_DIR = '.cache/stats';
+// Use /tmp for cache in production (Docker read-only filesystem)
+const STATS_CACHE_DIR = process.env.NODE_ENV === 'production' ? '/tmp/stats-cache' : '.cache/stats';
 const STATS_CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 
 // Ensure cache directory exists
-if (!existsSync(STATS_CACHE_DIR)) {
-    mkdirSync(STATS_CACHE_DIR, { recursive: true });
+try {
+    if (!existsSync(STATS_CACHE_DIR)) {
+        mkdirSync(STATS_CACHE_DIR, { recursive: true });
+    }
+} catch (e) {
+    console.warn('Could not create stats cache directory:', e);
 }
 
 interface CachedStats {

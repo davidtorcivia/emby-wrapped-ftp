@@ -50,6 +50,13 @@ services:
     environment:
       - EMBY_SERVER_URL=http://your-emby-server:8096
       - EMBY_API_KEY=your-api-key-here
+      # Optional: TMDB API key for enhanced poster images
+      - TMDB_API_KEY=
+      # Optional: Public URL for share links
+      - PUBLIC_URL=
+    volumes:
+      # Optional: Mount custom background music
+      - ./music:/app/static/music:ro
     restart: unless-stopped
 ```
 
@@ -68,6 +75,8 @@ docker run -d \
   -p 3000:3000 \
   -e EMBY_SERVER_URL=http://your-emby-server:8096 \
   -e EMBY_API_KEY=your-api-key-here \
+  -e TMDB_API_KEY=your-tmdb-key \
+  -v ./music:/app/static/music:ro \
   ghcr.io/davidtorcivia/emby-wrapped:latest
 ```
 
