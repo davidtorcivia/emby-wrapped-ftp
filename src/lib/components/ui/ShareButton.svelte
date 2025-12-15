@@ -88,7 +88,7 @@
     aria-label="Share this card"
 >
     <span class="icon">{isGenerating ? UNICODE.dots : "↗"}</span>
-    <span class="label">{isGenerating ? "Saving..." : label}</span>
+    <span class="label">{isGenerating ? "..." : label}</span>
 </button>
 
 <style>
@@ -99,18 +99,30 @@
         gap: 0.5rem;
         background: rgba(255, 255, 255, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 0.75rem 1.25rem;
+        padding: 0.5rem 1rem;
         border-radius: 999px;
         color: rgba(255, 255, 255, 0.9);
         font-family: inherit;
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.2s ease;
         backdrop-filter: blur(8px);
         z-index: 50;
-        min-width: 100px;
-        min-height: 44px;
+    }
+
+    /* Icon-only on mobile */
+    @media (max-width: 600px) {
+        .share-btn {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border-radius: 50%;
+        }
+
+        .label {
+            display: none;
+        }
     }
 
     .share-btn:hover:not(:disabled) {
@@ -129,7 +141,7 @@
     }
 
     .icon {
-        font-size: 1.1rem;
+        font-size: 1rem;
         line-height: 1;
     }
 

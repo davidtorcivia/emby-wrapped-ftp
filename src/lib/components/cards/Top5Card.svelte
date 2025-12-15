@@ -437,34 +437,38 @@
 	/* Mobile tweak: smaller hero, 2x2 grid, tighter spacing */
 	@media (max-width: 600px) {
 		.hero-poster-wrap {
-			width: 140px; /* Smaller hero on mobile */
+			width: 120px; /* Even smaller hero on mobile */
 		}
 
 		.hero-title {
-			font-size: 1.25rem;
+			font-size: 1.125rem;
 		}
 
 		.hero-info {
-			margin-top: 0.75rem;
+			margin-top: 0.5rem;
 		}
 
 		.hero-stats {
-			font-size: 0.875rem;
+			font-size: 0.8rem;
 		}
 
 		.main-title {
-			font-size: 1.5rem;
+			font-size: 1.35rem;
+		}
+
+		.header-section {
+			margin-bottom: 0.25rem;
 		}
 
 		.posters-grid {
-			gap: 0.75rem;
+			gap: 0.5rem;
 		}
 
 		.secondary-grid {
 			grid-template-columns: repeat(2, 1fr);
-			gap: 0.75rem;
-			max-width: 280px;
-			padding-top: 1rem;
+			gap: 0.5rem;
+			max-width: 240px;
+			padding-top: 0.75rem;
 		}
 	}
 
@@ -483,7 +487,15 @@
 	@media (max-width: 600px) {
 		.grid-item {
 			width: 100%;
-			max-width: 100px;
+			max-width: 90px;
+		}
+
+		.grid-title {
+			font-size: 0.55rem;
+		}
+
+		.grid-stats {
+			font-size: 0.5rem;
 		}
 	}
 

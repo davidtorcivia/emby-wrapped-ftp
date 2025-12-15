@@ -46,6 +46,9 @@
         totalMinutes: stats.totalMinutes,
         primaryGenre: stats.primaryGenre,
         primaryGenrePercentage: stats.primaryGenrePercentage,
+        secondaryGenre: stats.secondaryGenre,
+        genreDiversity: stats.genreDiversity,
+        movieToTvRatio: stats.movieToTvRatio,
     });
 
     $: peakHour = formatHour(stats.peakHour);
