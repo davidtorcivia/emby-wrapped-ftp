@@ -43,7 +43,40 @@ A beautiful, Spotify Wrapped-style year-in-review experience for your Emby media
 
 ## Quick Start with Docker (Recommended)
 
-### Using Docker Compose
+### Option 1: Using Pre-built Image (Easiest)
+
+1. Create a directory for your setup:
+```bash
+mkdir emby-wrapped && cd emby-wrapped
+```
+
+2. Create a `docker-compose.yml` file:
+```yaml
+version: '3.8'
+services:
+  emby-wrapped:
+    image: ghcr.io/davidtorcivia/emby-wrapped-ftp:latest
+    container_name: emby-wrapped
+    ports:
+      - "3000:3000"
+    environment:
+      - EMBY_SERVER_URL=http://your-emby-server:8096
+      - EMBY_API_KEY=your-api-key-here
+      - TMDB_API_KEY=  # Optional: for enhanced poster images
+      - PUBLIC_URL=    # Optional: for share links
+    volumes:
+      - ./music:/app/static/music:ro  # Optional: custom background music
+    restart: unless-stopped
+```
+
+3. Run:
+```bash
+docker-compose up -d
+```
+
+4. Access at `http://localhost:3000`
+
+### Option 2: Build from Source
 
 1. Clone the repository:
 ```bash
@@ -72,12 +105,16 @@ docker-compose up -d --build
 
 5. Access at `http://localhost:3000`
 
-### Rebuilding After Updates
+### Updating
 
-To pull the latest changes and rebuild:
+**Pre-built image:**
 ```bash
-git pull
-docker-compose up -d --build
+docker-compose pull && docker-compose up -d
+```
+
+**From source:**
+```bash
+git pull && docker-compose up -d --build
 ```
 
 ## Local Development
