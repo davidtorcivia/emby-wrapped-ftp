@@ -219,8 +219,13 @@
 	/* More compact on mobile to prevent overflow */
 	@media (max-width: 600px) {
 		.card-base {
-			padding: 4rem 0.75rem 5rem;
+			padding: 2.5rem 0.75rem 4.5rem;
 			justify-content: center;
+		}
+
+		.content {
+			transform: scale(0.92);
+			transform-origin: center center;
 		}
 	}
 
