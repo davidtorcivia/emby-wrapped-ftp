@@ -80,8 +80,8 @@ docker-compose up -d
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/davidtorcivia/emby-wrapped.git
-cd emby-wrapped
+git clone https://github.com/davidtorcivia/emby-wrapped-ftp.git
+cd emby-wrapped-ftp
 ```
 
 2. Create your environment file:
