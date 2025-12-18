@@ -238,7 +238,7 @@
 	.nav-hints {
 		display: flex;
 		justify-content: center;
-		gap: 1rem;
+		gap: 0.5rem;
 		margin-bottom: 1rem;
 	}
 
@@ -246,12 +246,13 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 44px;
-		height: 44px;
-		background: rgba(20, 20, 20, 0.8);
+		width: 40px;
+		height: 40px;
+		background: rgba(20, 20, 20, 0.9);
+		backdrop-filter: blur(10px);
 		border: 1px solid rgba(255, 255, 255, 0.1);
 		border-radius: 50%;
-		color: rgba(255, 255, 255, 0.5);
+		color: rgba(255, 255, 255, 0.7);
 		font-family: "JetBrains Mono", monospace;
 		font-size: 1.25rem;
 		cursor: pointer;
@@ -263,6 +264,28 @@
 		background: rgba(29, 185, 84, 0.2);
 		border-color: rgba(29, 185, 84, 0.3);
 		color: #1db954;
+	}
+
+	/* Mobile: position at bottom inline with audio controls */
+	@media (max-width: 767px) {
+		.nav-hints {
+			position: fixed;
+			bottom: 1.5rem;
+			left: 50%;
+			transform: translateX(-50%);
+			z-index: 1000;
+			margin: 0;
+		}
+
+		.nav-btn {
+			width: 36px;
+			height: 36px;
+			opacity: 0.6;
+		}
+
+		.nav-btn:active {
+			opacity: 1;
+		}
 	}
 
 	/* Desktop: show side navigation areas */

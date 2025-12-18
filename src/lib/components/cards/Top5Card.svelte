@@ -209,6 +209,7 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
+		align-items: center;
 		padding: 2rem 1rem;
 		opacity: 0;
 		transition: opacity 0.4s ease;
@@ -218,8 +219,8 @@
 	/* More compact on mobile to prevent overflow */
 	@media (max-width: 600px) {
 		.card-base {
-			padding: 3rem 0.75rem 1rem;
-			justify-content: flex-start;
+			padding: 4rem 0.75rem 5rem;
+			justify-content: center;
 		}
 	}
 
@@ -267,14 +268,13 @@
 		}
 	}
 
-	.content-container {
+	.content {
 		position: relative;
 		z-index: 1;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		height: 100%;
 		width: 100%;
 		max-width: 500px;
 		gap: 1.5rem;

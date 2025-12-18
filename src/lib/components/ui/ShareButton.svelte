@@ -97,27 +97,32 @@
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(20, 20, 20, 0.9);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         padding: 0.5rem 1rem;
         border-radius: 999px;
-        color: rgba(255, 255, 255, 0.9);
+        color: rgba(255, 255, 255, 0.7);
         font-family: inherit;
         font-size: 0.75rem;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.2s ease;
-        backdrop-filter: blur(8px);
         z-index: 50;
     }
 
-    /* Icon-only on mobile */
+    /* Icon-only and subtle on mobile */
     @media (max-width: 600px) {
         .share-btn {
             width: 36px;
             height: 36px;
             padding: 0;
             border-radius: 50%;
+            opacity: 0.6;
+        }
+
+        .share-btn:active {
+            opacity: 1;
         }
 
         .label {
